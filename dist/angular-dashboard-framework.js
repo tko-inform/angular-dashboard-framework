@@ -29,7 +29,7 @@ angular.module('adf', ['adf.provider', 'adf.locale', 'ui.bootstrap'])
   .value('adfTemplatePath', '../src/templates/')
   .value('rowTemplate', '<adf-dashboard-row row="row" adf-model="adfModel" options="options" edit-mode="editMode" ng-repeat="row in column.rows" />')
   .value('columnTemplate', '<adf-dashboard-column column="column" adf-model="adfModel" options="options" edit-mode="editMode" ng-repeat="column in row.columns" />')
-  .value('adfVersion', '0.12.0');
+  .value('adfVersion', '0.13.0-SNAPSHOT');
 
 /*
  * The MIT License
@@ -507,17 +507,17 @@ angular.module('adf')
      */
     function createCategories(widgets){
       var categories = {};
-      angular.forEach(widgets, function(widget){
+      angular.forEach(widgets, function(widget, key){
         var category = widget.category;
         // if the widget has no category use a default one
         if (!category){
           category = 'Miscellaneous';
         }
         // push widget to category array
-        if (!categories[category]){
-          categories[category] = [];
+        if (angular.isUndefined(categories[category])){
+          categories[category] = {widgets: {}};
         }
-        categories[category].push(widget);
+        categories[category].widgets[key] = widget;
       });
       return categories;
     }
@@ -604,7 +604,7 @@ angular.module('adf')
           }
 
           if (!$scope.editMode){
-            $rootScope.$broadcast('adfDashboardChanged', name, model);
+            $rootScope.$broadcast('adfDashboardChanged', $scope.name, model);
           }
         };
 
@@ -826,6 +826,28 @@ angular.module('adf.locale')
         ADF_WIDGET_TOOLTIP_EDIT: 'Ändra widget konfigurering',
         ADF_WIDGET_TOOLTIP_FULLSCREEN: 'Visa widget i fullskärm',
         ADF_WIDGET_TOOLTIP_REMOVE: 'Ta bort widget'
+      },
+      'ru-RU': {
+        ADF_COMMON_CLOSE: 'Закрыть',
+        ADF_COMMON_DELETE: 'Удалить',
+        ADF_COMMON_TITLE: 'Заголовок',
+        ADF_COMMON_CANCEL: 'Отмена',
+        ADF_COMMON_APPLY: 'Применить',
+        ADF_COMMON_EDIT_DASHBOARD: 'Редактировать дашборд',
+        ADF_EDIT_DASHBOARD_STRUCTURE_LABEL: 'Структура',
+        ADF_DASHBOARD_TITLE_TOOLTIP_ADD: 'Добавить новый виджет',
+        ADF_DASHBOARD_TITLE_TOOLTIP_SAVE: 'Сохранить изменения',
+        ADF_DASHBOARD_TITLE_TOOLTIP_EDIT_MODE: 'Включить режим редактирования',
+        ADF_DASHBOARD_TITLE_TOOLTIP_UNDO: 'Отменить изменения',
+        ADF_WIDGET_ADD_HEADER: 'Добавить новый виджет',
+        ADF_WIDGET_DELETE_CONFIRM_MESSAGE: 'Вы действительно хотите удалить этот виджет?',
+        ADF_WIDGET_TOOLTIP_REFRESH: 'Обновить содержимое виджета',
+        ADF_WIDGET_TOOLTIP_MOVE: 'Поменять положение виджета',
+        ADF_WIDGET_TOOLTIP_COLLAPSE: 'Свернуть виджет',
+        ADF_WIDGET_TOOLTIP_EXPAND: 'Развернуть виджет',
+        ADF_WIDGET_TOOLTIP_EDIT: 'Редактировать настройки виджета',
+        ADF_WIDGET_TOOLTIP_FULLSCREEN: 'Виджет во весь экран',
+        ADF_WIDGET_TOOLTIP_REMOVE: 'Удалить виджет'
       }
     }
   }
